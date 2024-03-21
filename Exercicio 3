@@ -1,0 +1,67 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+// Função para formatar um nome para o formato de agenda telefônica
+string formatoAgenda(const string &nome) {
+    stringstream ss(nome);
+    string parte, sobrenome;
+    vector<string> partes;
+
+    // Extrair partes do nome separadas por espaço
+    while (ss >> parte) {
+        partes.push_back(parte);
+    }
+
+    // O último elemento é considerado como sobrenome
+    sobrenome = partes.back();
+    partes.pop_back();
+
+    // Reorganizar partes do nome
+    string nomeFormatado = sobrenome + ", ";
+    for (size_t i = 0; i < partes.size(); ++i) {
+        nomeFormatado += partes[i];
+        if (i != partes.size() - 1) {
+            nomeFormatado += " ";
+        }
+    }
+
+    return nomeFormatado;
+}
+
+int main() {
+    const string arquivoEntradaNome = "nomes.txt";
+    const string arquivoSaidaNome = "nomes_formatados.txt";
+
+    // Abrir o arquivo de entrada
+    ifstream arquivoEntrada(arquivoEntradaNome);
+    if (!arquivoEntrada.is_open()) {
+        cout << "Erro ao abrir o arquivo de entrada: " << arquivoEntradaNome << endl;
+        return 1;
+    }
+
+    // Abrir o arquivo de saída
+    ofstream arquivoSaida(arquivoSaidaNome);
+    if (!arquivoSaida.is_open()) {
+        cout << "Erro ao abrir o arquivo de saída: " << arquivoSaidaNome << endl;
+        return 1;
+    }
+
+    string linha;
+    while (getline(arquivoEntrada, linha)) {
+        string nomeFormatado = formatoAgenda(linha);
+        arquivoSaida << nomeFormatado << endl;
+    }
+
+    cout << "Nomes foram formatados e gravados no arquivo '" << arquivoSaidaNome << "'." << endl;
+
+    // Fechar os arquivos
+    arquivoEntrada.close();
+    arquivoSaida.close();
+
+    return 0;
+}
