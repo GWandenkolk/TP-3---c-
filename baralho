@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <ctime>
+#include <cstdlib>
+
+using namespace std;
+
+// Função para representar as cartas como strings
+string representarCarta(int naipe, int numero, int baralho) {
+    return to_string(naipe) + "-" + to_string(numero) + "-" + to_string(baralho);
+}
+
+int main() {
+    // Inicialização do gerador de números aleatórios
+    srand(time(0));
+
+    // Criar e embaralhar o baralho
+    vector<string> baralho;
+    for (int n = 1; n <= 4; ++n) {
+        for (int c = 1; c <= 13; ++c) {
+            for (int b = 1; b <= 2; ++b) {
+                baralho.push_back(representarCarta(n, c, b));
+            }
+        }
+    }
+    random_shuffle(baralho.begin(), baralho.end());
+
+    // Distribuir as cartas para os jogadores
+    vector<vector<string>> mao(4, vector<string>(11));
+    for (int i = 0; i < 11; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            mao[j][i] = baralho.back();
+            baralho.pop_back();
+        }
+    }
+
+    // Exibir as mãos dos jogadores
+    for (int jogador = 0; jogador < 4; ++jogador) {
+        cout << "Mão do jogador " << jogador + 1 << ":" << endl;
+        for (int carta = 0; carta < 11; ++carta) {
+            cout << mao[jogador][carta] << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
