@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <algorithm> // Para a função std::remove_if
+#include <cctype>    // Para a função std::isspace
+
+using namespace std;
+
+// Função para remover espaços de uma string
+void removerEspacos(string &str) {
+    str.erase(remove_if(str.begin(), str.end(), ::isspace), str.end());
+}
+
+// Função para verificar se uma string é um palíndromo
+bool ehPalindromo(const string &str) {
+    int esquerda = 0;
+    int direita = str.length() - 1;
+
+    while (esquerda < direita) {
+        if (str[esquerda] != str[direita]) {
+            return false;
+        }
+        esquerda++;
+        direita--;
+    }
+
+    return true;
+}
+
+int main() {
+    string mensagem;
+    cout << "Digite a mensagem: ";
+    getline(cin, mensagem);
+
+    // Remover espaços da mensagem
+    removerEspacos(mensagem);
+
+    // Verificar se a mensagem é um palíndromo
+    if (ehPalindromo(mensagem)) {
+        cout << "A mensagem digitada é um palíndromo." << endl;
+    } else {
+        cout << "A mensagem digitada não é um palíndromo." << endl;
+    }
+
+    return 0;
+}
