@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <unistd.h> // para usar usleep()
+
+using namespace std;
+
+int main() {
+    string mensagem;
+    cout << "Digite a mensagem: ";
+    getline(cin, mensagem);
+
+    // Limpar a tela
+    system("clear");
+
+    // Imprimir a mensagem centralizada na linha 5
+    int espacos = (80 - mensagem.length()) / 2;
+    for (int i = 0; i < espacos; ++i) {
+        cout << " ";
+    }
+    cout << mensagem << endl;
+
+    // Simular a cascata
+    for (int linha = 6; linha <= 20; ++linha) {
+        for (int i = 0; i < espacos; ++i) {
+            cout << " ";
+        }
+        for (int i = 0; i < mensagem.length(); ++i) {
+            if (linha - 5 == i) {
+                cout << mensagem[i];
+            } else {
+                cout << " ";
+            }
+        }
+        cout << endl;
+
+        // Aguardar um pouco antes de imprimir a próxima linha
+        usleep(300000); // 300ms
+    }
+
+    return 0;
+}
