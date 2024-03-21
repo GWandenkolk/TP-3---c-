@@ -1,0 +1,75 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Função para formatar um nome no formato de citação bibliográfica
+string formatoCitação(const string &nome) {
+    stringstream ss(nome);
+    string parte, sobrenome;
+    vector<string> partes;
+
+    // Extrair partes do nome separadas por espaço
+    while (ss >> parte) {
+        partes.push_back(parte);
+    }
+
+    // O último elemento é considerado como sobrenome
+    sobrenome = partes.back();
+    partes.pop_back();
+
+    // Converter o sobrenome para maiúsculas
+    transform(sobrenome.begin(), sobrenome.end(), sobrenome.begin(), ::toupper);
+
+    // Formatar as partes do nome para a citação bibliográfica
+    string nomeFormatado = sobrenome + ", ";
+    if (partes.size() > 0) {
+        nomeFormatado += partes[0].substr(0, 1); // Primeira letra do primeiro nome
+        nomeFormatado += ". ";
+    }
+    // Inserir as iniciais dos nomes intermediários, se houver
+    for (size_t i = 1; i < partes.size() - 1; ++i) {
+        nomeFormatado += partes[i].substr(0, 1);
+        nomeFormatado += ". ";
+    }
+    // Adicionar o último nome completo (sem abreviação)
+    if (partes.size() > 1) {
+        nomeFormatado += partes.back();
+    }
+
+    return nomeFormatado;
+}
+
+int main() {
+    // Abrir o arquivo de entrada
+    ifstream arquivoEntrada("nomes.txt");
+    if (!arquivoEntrada.is_open()) {
+        cout << "Erro ao abrir o arquivo de entrada." << endl;
+        return 1;
+    }
+
+    // Abrir o arquivo de saída
+    ofstream arquivoSaida("nomes_formatados.txt");
+    if (!arquivoSaida.is_open()) {
+        cout << "Erro ao abrir o arquivo de saída." << endl;
+        return 1;
+    }
+
+    string linha;
+    while (getline(arquivoEntrada, linha)) {
+        string nomeFormatado = formatoCitação(linha);
+        arquivoSaida << nomeFormatado << endl;
+    }
+
+    cout << "Nomes foram formatados e gravados no arquivo 'nomes_formatados.txt'." << endl;
+
+    // Fechar os arquivos
+    arquivoEntrada.close();
+    arquivoSaida.close();
+
+    return 0;
+}
